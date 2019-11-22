@@ -1,0 +1,46 @@
+body {
+  overflow-x: hidden;
+}
+.shop-card {
+  height: 350px;
+  /*width: 100%;*/
+  margin-left: 10%;
+  /*border: 1px solid;*/
+  /*border-radius: 10px;*/
+}
+.shop-image, .shop-content {
+    height: 50%;
+    overflow-y: hidden;
+}
+#name {
+  color: #00b359;
+  font-size: 12px;
+}
+#detail {
+  font-size: 17px;
+}
+#per {
+  font-size: 12px;
+  color: #00b359;
+}
+#perRate {
+  font-size: 17px;
+  color: #00b359;
+}
+.fa-star {
+  color: #00b359 !important;
+}
+#searchBar, #searchBar_1 {
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('https://www.w3schools.com/howto/searchicon.png');
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
