@@ -5,6 +5,7 @@ from .models import *
 from datetime import datetime
 from django.core.mail import send_mail
 from django_twilio.client import twilio_client
+from twilio.base.exceptions import TwilioRestException
 # Create your views here.
 
 def index(request):
@@ -35,12 +36,16 @@ def mail(userType, visitor, host):
         to_email,
     )
 
-def sms():
-    message = twilio_client.messages.create(
-                to='+918318799361', 
-                from_='+19513970207', 
-                body='Hey! OTP for your MINU account is'
-            )
+def sms(visitor, host):
+    try:
+        message = twilio_client.messages.create(
+                    to='+91'+str(host.user.contact), 
+                    from_='+19513970207', 
+                    body="Hi "+host.user.firstname+" "+host.user.lastname+",\nVisitor Details:\nName - "+visitor.user.firstname+" "+visitor.user.lastname+"\nEmail - "+visitor.user.email+"\nPhone - "+visitor.user.contact+"\nCheckIn Time - "+str(visitor.checkIn)
+                )
+        return 'success'
+    except TwilioRestException:
+        return 'fail'
 
 def checkIn(request):
     if request.method == "POST":
@@ -59,8 +64,8 @@ def checkIn(request):
             visitor = Visitor.objects.create(user=user, host=host, checkIn=checkIn)
             visitor.save()
             mail('Host', visitor, host)
-            sms()
-        return redirect('http://localhost:8000/')
+            status = sms(visitor, host)
+        return redirect('https://entry-management.herokuapp.com/')
     else:
         return render(request, '/', {})
 
@@ -114,8 +119,8 @@ def checkOut(request):
             visitor.save()
             mail('Visitor', visitor, host)
             visitorUser.delete()
-            return redirect('http://localhost:8000/')
-        return redirect('http://localhost:8000/')
+            return redirect('https://entry-management.herokuapp.com/')
+        return redirect('https://entry-management.herokuapp.com/')
     else:
         return render(request, '/', {})
 
@@ -124,8 +129,24 @@ def hostRegistration(request):
         form = UserForm(request.POST)
         if form.is_valid():
             user = form.save()
-            host = Host.objects.create(user=user)
-            host.save()
-        return redirect('http://localhost:8000/')
+            email = user.email
+            contact = user.contact
+            userWithEmail = User.objects.filter(email=email).count()
+            userWithContact = User.objects.filter(contact=contact).count()
+            if userWithEmail>1 or userWithContact>1:
+                user.delete()
+                error_msg = "User with the given email or contact already exists"
+                form = UserForm()
+                hosts = Host.objects.filter(offline=False)
+                context = {
+                    'form': form,
+                    'hosts': hosts,
+                    'error': error_msg,
+                }
+                return render(request, 'index.html', context)
+            else:
+                host = Host.objects.create(user=user)
+                host.save()
+        return redirect('https://entry-management.herokuapp.com/')
     else:
         return render(request, '/', {})

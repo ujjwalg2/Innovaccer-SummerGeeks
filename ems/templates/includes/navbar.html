@@ -21,7 +21,11 @@
     </div>
 </nav>
 <br /><br /><br />
-
+{% if error %}
+    <div class="alert alert-danger">
+        <strong>Error!</strong> {{error}}
+    </div>
+{% endif %}
 <div id="CheckIn" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -70,12 +74,10 @@
                 <form role="form" action='/check-out/' id="checkOut" method="post">
                     {% csrf_token %}
                     <div class="form-group has-feedback">
-                        <input type="email" name="email" class="form-control" placeholder="Email"
-                            tabindex="4">
+                        <input type="email" name="email" class="form-control" placeholder="Email" tabindex="4">
                     </div>
                     <div class="form-group has-feedback">
-                        <input type="number" name="contact" class="form-control" placeholder="Contact"
-                            tabindex="4">
+                        <input type="number" name="contact" class="form-control" placeholder="Contact" tabindex="4">
                     </div>
                     <hr class="colorgraph">
                     <div class="row">

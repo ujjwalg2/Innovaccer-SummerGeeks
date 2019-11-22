@@ -79,14 +79,16 @@ WSGI_APPLICATION = 'entryManagement.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd3tsifbtcko3la',
-        'USER': 'uusmrssnnucljx',
-        'PASSWORD': 'd0c81a4bcf94e90c5f8aceee1fe9b235c2749dd6f234494210c061ececf6e897',
-        'HOST': 'host.amazonaws.com',
-        'PORT': '5432',
+        'NAME': 'users',
+        'USER': 'admin',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -120,17 +122,14 @@ USE_L10N = True
 
 USE_TZ = True
 
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES[‘default’].update(db_from_env)
-
 EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'shikari9000@gmail.com'
-EMAIL_HOST_PASSWORD = 'bandhokdhari'
+EMAIL_HOST_PASSWORD = 'your password'
 EMAIL_PORT = 465
 
-TWILIO_ACCOUNT_SID = 'AC8214ce2ea96d6915511de15414b89633'
-TWILIO_AUTH_TOKEN = 'e65e2616e809e2d601d943329b0c3ec1'
+TWILIO_ACCOUNT_SID = 'your sid'
+TWILIO_AUTH_TOKEN = 'your token'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
@@ -145,3 +144,6 @@ STATICFILES_DIRS = (
 
 #  Add configuration for static files storage using whitenoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media/'
